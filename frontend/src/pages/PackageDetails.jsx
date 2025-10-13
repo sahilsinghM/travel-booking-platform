@@ -6,6 +6,7 @@ import api from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
+import { formatCurrency } from '../utils/helpers';
 
 const PackageDetails = () => {
   const { id } = useParams();
@@ -348,7 +349,7 @@ const PackageDetails = () => {
                 <div className="border-t border-gray-200 pt-4 mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Price per person</span>
-                    <span className="font-medium">${packageData.price}</span>
+                    <span className="font-medium">{formatCurrency(packageData.price)}</span>
                   </div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Travelers</span>
@@ -357,12 +358,12 @@ const PackageDetails = () => {
                   {savings > 0 && (
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-mint-green-600">Savings</span>
-                      <span className="font-medium text-mint-green-600">-${savings}</span>
+                      <span className="font-medium text-mint-green-600">-{formatCurrency(savings)}</span>
                     </div>
                   )}
                   <div className="flex justify-between items-center text-lg font-bold">
                     <span>Total</span>
-                    <span className="text-ocean-blue-600">${totalPrice}</span>
+                    <span className="text-ocean-blue-600">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
 

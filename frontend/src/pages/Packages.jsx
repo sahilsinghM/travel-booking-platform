@@ -6,6 +6,7 @@ import api from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import { formatCurrency } from '../utils/helpers';
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -311,11 +312,11 @@ const Packages = () => {
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <span className="text-2xl font-bold text-ocean-blue-600">
-                              ${pkg.price}
+                              {formatCurrency(pkg.price)}
                             </span>
                             {pkg.originalPrice && (
                               <span className="text-sm text-gray-500 line-through ml-2">
-                                ${pkg.originalPrice}
+                                {formatCurrency(pkg.originalPrice)}
                               </span>
                             )}
                           </div>

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import mockApi from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { formatCurrency } from '../utils/helpers';
 
 const Booking = () => {
   const location = useLocation();
@@ -427,7 +428,7 @@ const Booking = () => {
                 <div className="border-t border-gray-200 pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Price per person</span>
-                    <span className="font-medium">${packageData.price}</span>
+                    <span className="font-medium">{formatCurrency(packageData.price)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Number of travelers</span>
@@ -437,13 +438,13 @@ const Booking = () => {
                     <div className="flex justify-between text-sm">
                       <span className="text-mint-green-600">Savings</span>
                       <span className="font-medium text-mint-green-600">
-                        -${(packageData.originalPrice - packageData.price) * travelers}
+                        -{formatCurrency((packageData.originalPrice - packageData.price) * travelers)}
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between text-lg font-bold pt-2 border-t">
                     <span>Total</span>
-                    <span className="text-ocean-blue-600">${totalPrice}</span>
+                    <span className="text-ocean-blue-600">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
               </Card>
