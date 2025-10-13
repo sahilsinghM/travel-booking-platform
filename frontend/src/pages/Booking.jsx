@@ -154,7 +154,7 @@ const Booking = () => {
                 </div>
                 <div className="flex justify-between text-lg">
                   <span className="font-semibold text-gray-900">Total Amount:</span>
-                  <span className="font-bold text-ocean-blue-600">${totalPrice}</span>
+                  <span className="font-bold text-ocean-blue-600">{formatCurrency(totalPrice)}</span>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiPackage, FiDollarSign, FiUsers, FiCalendar, FiTrendingUp } from 'react-icons/fi';
 import mockApi from '../../services/mockApi';
 import Card from '../../components/ui/Card';
+import { formatCurrency } from '../../utils/helpers';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -63,7 +64,7 @@ const Dashboard = () => {
     },
     {
       title: 'Total Revenue',
-      value: `$${stats.totalRevenue.toLocaleString()}`,
+      value: formatCurrency(stats.totalRevenue),
       icon: FiDollarSign,
       color: 'sand',
       link: '/admin/bookings'
@@ -161,7 +162,7 @@ const Dashboard = () => {
                         <p className="text-xs text-gray-500">{booking.bookingDate}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">${booking.totalAmount}</p>
+                        <p className="font-semibold text-gray-900">{formatCurrency(booking.totalAmount)}</p>
                         <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
                           {booking.status}
                         </span>

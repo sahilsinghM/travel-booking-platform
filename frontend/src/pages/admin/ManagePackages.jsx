@@ -5,6 +5,7 @@ import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
 import mockApi from '../../services/mockApi';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
+import { formatCurrency } from '../../utils/helpers';
 
 const ManagePackages = () => {
   const [packages, setPackages] = useState([]);
@@ -132,9 +133,9 @@ const ManagePackages = () => {
                       {pkg.duration}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">${pkg.price}</div>
+                      <div className="text-sm font-medium text-gray-900">{formatCurrency(pkg.price)}</div>
                       {pkg.originalPrice && (
-                        <div className="text-sm text-gray-500 line-through">${pkg.originalPrice}</div>
+                        <div className="text-sm text-gray-500 line-through">{formatCurrency(pkg.originalPrice)}</div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

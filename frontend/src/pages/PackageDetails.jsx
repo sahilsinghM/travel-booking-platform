@@ -286,17 +286,17 @@ const PackageDetails = () => {
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-3xl font-bold text-ocean-blue-600">
-                      ${packageData.price}
+                      {formatCurrency(packageData.price)}
                     </span>
                     {packageData.originalPrice && (
                       <span className="text-lg text-gray-500 line-through">
-                        ${packageData.originalPrice}
+                        {formatCurrency(packageData.originalPrice)}
                       </span>
                     )}
                   </div>
                   {packageData.originalPrice && (
                     <p className="text-sm text-mint-green-600 font-medium">
-                      Save ${packageData.originalPrice - packageData.price} per person
+                      Save {formatCurrency(packageData.originalPrice - packageData.price)} per person
                     </p>
                   )}
                 </div>

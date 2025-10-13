@@ -4,6 +4,7 @@ import { FiCalendar, FiUser, FiDollarSign, FiFilter } from 'react-icons/fi';
 import mockApi from '../../services/mockApi';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
+import { formatCurrency } from '../../utils/helpers';
 
 const ManageBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -135,7 +136,7 @@ const ManageBookings = () => {
                         </div>
                         <div className="flex items-center text-gray-600">
                           <FiDollarSign size={16} className="mr-2" />
-                          <span className="font-semibold">${booking.totalAmount}</span>
+                          <span className="font-semibold">{formatCurrency(booking.totalAmount)}</span>
                         </div>
                       </div>
                     </div>
