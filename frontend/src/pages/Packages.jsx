@@ -325,7 +325,7 @@ const Packages = () => {
                           </span>
                         </div>
                         
-                        <Link to={`/packages/${pkg.id}`}>
+                        <Link to={`/packages/${pkg._id}`}>
                           <Button className="w-full">
                             View Details
                           </Button>
