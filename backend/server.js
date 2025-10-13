@@ -19,10 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // Enable CORS
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? [
-        'https://travel-booking-platform.vercel.app',
-        'https://your-custom-domain.com'
-      ] 
+    ? true  // Allow all origins in production for debugging
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true
 }));
