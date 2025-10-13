@@ -1,5 +1,7 @@
 // Real API service for backend integration
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://travel-booking-platform-2i9o.onrender.com/api'
+  : 'http://localhost:5000/api';
 
 // Utility function to get auth headers
 const getAuthHeaders = () => {
