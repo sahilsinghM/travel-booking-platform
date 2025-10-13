@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiCalendar, FiStar, FiUsers, FiClock } from 'react-icons/fi';
-import mockApi from '../services/mockApi';
+import api from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 
@@ -18,7 +18,7 @@ const Home = () => {
 
   const loadFeaturedPackages = async () => {
     try {
-      const packages = await mockApi.getPackages();
+      const packages = await api.getPackages();
       setFeaturedPackages(packages.slice(0, 4)); // Show first 4 packages
     } catch (error) {
       console.error('Failed to load packages:', error);

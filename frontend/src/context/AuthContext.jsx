@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import mockApi from '../services/mockApi';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const currentUser = await mockApi.getCurrentUser();
+      const currentUser = await api.getCurrentUser();
       setUser(currentUser);
     } catch (err) {
       console.error('Auth check failed:', err);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await mockApi.login(email, password);
+      const response = await api.login(email, password);
       
       if (response.success) {
         setUser(response.user);
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await mockApi.register(userData);
+      const response = await api.register(userData);
       
       if (response.success) {
         setUser(response.user);
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await mockApi.logout();
+      await api.logout();
       setUser(null);
       setError(null);
     } catch (err) {

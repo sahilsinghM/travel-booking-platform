@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiStar, FiMapPin, FiUsers, FiClock, FiCalendar, FiCheck, FiX, FiArrowLeft, FiShare2, FiHeart } from 'react-icons/fi';
-import mockApi from '../services/mockApi';
+import api from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
@@ -27,7 +27,7 @@ const PackageDetails = () => {
   const loadPackageDetails = async () => {
     try {
       setLoading(true);
-      const pkg = await mockApi.getPackageById(id);
+      const pkg = await api.getPackageById(id);
       if (pkg) {
         setPackageData(pkg);
         // Set default end date based on duration

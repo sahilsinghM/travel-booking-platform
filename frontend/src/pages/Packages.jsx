@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiStar, FiUsers, FiClock, FiFilter, FiX } from 'react-icons/fi';
-import mockApi from '../services/mockApi';
+import api from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -39,7 +39,7 @@ const Packages = () => {
       if (filters.maxPrice) filterParams.maxPrice = parseInt(filters.maxPrice);
       if (filters.duration) filterParams.duration = filters.duration;
 
-      const allPackages = await mockApi.getPackages(filterParams);
+      const allPackages = await api.getPackages(filterParams);
       setPackages(allPackages);
       setCurrentPage(1);
     } catch (error) {

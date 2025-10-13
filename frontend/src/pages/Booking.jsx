@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiCheck, FiMapPin, FiCalendar, FiUsers, FiCreditCard } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
-import mockApi from '../services/mockApi';
+import mockApi from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 
@@ -79,7 +79,7 @@ const Booking = () => {
 
     try {
       // Create booking
-      const booking = await mockApi.createBooking({
+      const booking = await api.createBooking({
         userId: user.id,
         packageId: packageData.id,
         packageTitle: packageData.title,
