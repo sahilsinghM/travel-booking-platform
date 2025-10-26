@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiSearch, FiMapPin, FiStar, FiUsers, FiClock, FiFilter, FiX } from 'react-icons/fi';
+import { FiSearch, FiMapPin, FiStar, FiUsers, FiClock, FiFilter, FiX, FiHeart } from 'react-icons/fi';
 import api from '../services/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -265,92 +265,69 @@ const Packages = () => {
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                   >
                     <Link to={`/packages/${pkg._id}`} className="block h-full">
-                      <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 group cursor-pointer h-full transform hover:-translate-y-1">
-                        {/* Hero Section - Image with Error Handling */}
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer h-full border-0">
+                        {/* Image Section - Larger and More Prominent */}
                         <div className="relative">
                           {imageErrors[pkg._id] ? (
-                            <div className="w-full h-48 bg-gradient-to-br from-ocean-blue-400 via-ocean-blue-500 to-ocean-blue-600 flex flex-col items-center justify-center">
-                              <FiMapPin className="text-white mb-2" size={48} />
-                              <span className="text-white text-sm font-medium">Image Unavailable</span>
+                            <div className="w-full h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex flex-col items-center justify-center">
+                              <FiMapPin className="text-gray-400 mb-2" size={48} />
+                              <span className="text-gray-500 text-sm">Image Unavailable</span>
                             </div>
                           ) : (
                             <img
                               src={pkg.images[0]}
                               alt={pkg.title}
-                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                               onError={() => handleImageError(pkg._id)}
                             />
                           )}
-                          <Badge variant="secondary" className="absolute top-4 left-4 bg-black/50 text-white hover:bg-black/70">
+                          <Badge className="absolute top-3 left-3 bg-black/70 text-white text-xs border-0">
                             {pkg.category}
                           </Badge>
+                          <button className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 transition-colors">
+                            <FiHeart size={18} className="text-gray-700" />
+                          </button>
                         </div>
                         
-                        <CardContent className="p-6 flex flex-col h-full">
-                          {/* Title Section */}
-                          <div className="mb-4">
-                            <h3 className="text-xl font-bold text-gray-900 line-clamp-2 mb-2">
-                              {pkg.title}
-                            </h3>
-                            <div className="flex items-center text-gray-600">
-                              <FiStar className="text-yellow-400 mr-1" size={16} />
-                              <span className="text-sm font-medium">{pkg.rating}</span>
-                              <span className="text-sm ml-2">({pkg.reviews} reviews)</span>
-                            </div>
+                        {/* Card Content - Clean and Minimal */}
+                        <div className="p-4 flex flex-col h-full">
+                          {/* Title */}
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                            {pkg.title}
+                          </h3>
+                          
+                          {/* Location */}
+                          <div className="flex items-center text-sm text-gray-600 mb-2">
+                            <FiMapPin size={14} className="mr-1.5" />
+                            <span>{pkg.destination}</span>
                           </div>
                           
-                          {/* Location Section */}
-                          <div className="flex items-center text-gray-700 mb-4">
-                            <FiMapPin className="mr-2" size={18} />
-                            <span className="text-base font-medium">{pkg.destination}</span>
+                          {/* Rating and Duration */}
+                          <div className="flex items-center text-xs text-gray-500 mb-3">
+                            <FiStar className="text-yellow-400 mr-1" size={14} />
+                            <span className="font-medium">{pkg.rating}</span>
+                            <span className="mx-1">•</span>
+                            <span>{pkg.duration}</span>
                           </div>
                           
-                          {/* Meta Information */}
-                          <div className="bg-gray-50 rounded-lg px-3 py-2 mb-4 flex items-center justify-between text-xs text-gray-600">
-                            <div className="flex items-center">
-                              <FiClock size={14} className="mr-1" />
-                              <span>{pkg.difficulty}</span>
-                            </div>
-                            <div className="flex items-center">
-                              <FiUsers size={14} className="mr-1" />
-                              <span>{pkg.groupSize}</span>
-                            </div>
-                            <div className="flex items-center">
-                              <FiClock size={14} className="mr-1" />
-                              <span>{pkg.duration}</span>
-                            </div>
-                          </div>
-                          
-                          {/* Pricing Section */}
-                          <div className="mb-4 flex-grow">
-                            <div className="mb-1">
-                              <span className="text-4xl font-extrabold text-ocean-blue-600">
-                                {formatCurrency(pkg.price)}
-                              </span>
-                              <span className="text-sm text-gray-500 ml-2">per person</span>
-                            </div>
-                            {pkg.originalPrice && (
-                              <div className="flex items-center gap-2">
-                                <span className="text-base text-gray-500 line-through">
+                          {/* Pricing */}
+                          <div className="mt-auto">
+                            {pkg.originalPrice ? (
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold text-gray-900">
+                                  {formatCurrency(pkg.price)}
+                                </span>
+                                <span className="text-sm text-gray-500 line-through">
                                   {formatCurrency(pkg.originalPrice)}
                                 </span>
-                                <Badge className="bg-mint-green-100 text-mint-green-800 border-0">
-                                  Save {formatCurrency(pkg.originalPrice - pkg.price)}
-                                </Badge>
                               </div>
+                            ) : (
+                              <span className="text-2xl font-bold text-gray-900">
+                                {formatCurrency(pkg.price)}
+                              </span>
                             )}
                           </div>
-                          
-                          {/* CTA Section */}
-                          <div className="mt-auto">
-                            <Button className="w-full group-hover:shadow-lg transition-shadow">
-                              View Details
-                              <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </Button>
-                          </div>
-                        </CardContent>
+                        </div>
                       </Card>
                     </Link>
                   </motion.div>
