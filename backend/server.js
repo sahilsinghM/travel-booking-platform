@@ -8,8 +8,10 @@ const { cache } = require('./middleware/cache');
 // Load env vars
 dotenv.config();
 
-// Connect to database
-connectDB();
+// Connect to database (don't block on error)
+connectDB().catch(err => {
+  console.error('Database connection failed at startup:', err.message);
+});
 
 const app = express();
 
