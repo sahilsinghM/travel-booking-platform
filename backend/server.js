@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+// const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 const { cache } = require('./middleware/cache');
 
@@ -9,11 +9,11 @@ const { cache } = require('./middleware/cache');
 dotenv.config();
 
 // Connect to database (with error handling)
-setTimeout(() => {
-  connectDB().catch(err => {
-    console.error('Database connection failed:', err.message);
-  });
-}, 1000); // Delay DB connection by 1 second to let server start first
+// setTimeout(() => {
+//   connectDB().catch(err => {
+//     console.error('Database connection failed:', err.message);
+//   });
+// }, 1000); // Delay DB connection by 1 second to let server start first
 
 const app = express();
 
@@ -46,14 +46,14 @@ app.use(cors({
 }));
 
 // Apply caching middleware to packages route
-app.use('/api/packages', cache(5 * 60 * 1000)); // 5 minutes cache
+// app.use('/api/packages', cache(5 * 60 * 1000)); // 5 minutes cache
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/packages', require('./routes/packages'));
-app.use('/api/bookings', require('./routes/bookings'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/settings', require('./routes/settings'));
+// app.use('/api/auth', require('./routes/auth'));
+// app.use('/api/packages', require('./routes/packages'));
+// app.use('/api/bookings', require('./routes/bookings'));
+// app.use('/api/users', require('./routes/users'));
+// app.use('/api/settings', require('./routes/settings'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
