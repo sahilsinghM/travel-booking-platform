@@ -47,27 +47,27 @@ const Home = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Sarah Johnson",
-      location: "New York, USA",
+      name: "Priya Sharma",
+      location: "Mumbai, Maharashtra",
       rating: 5,
-      text: "Amazing experience! The Bali trip was everything I dreamed of and more. Highly recommended!",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100"
+      text: "The Ladakh trip was absolutely breathtaking! The landscapes were stunning and the service was excellent. Highly recommended for adventure lovers!",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop"
     },
     {
       id: 2,
-      name: "Michael Chen",
-      location: "Toronto, Canada",
+      name: "Rahul Patel",
+      location: "Ahmedabad, Gujarat",
       rating: 5,
-      text: "Professional service and incredible destinations. The Swiss Alps tour was breathtaking!",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100"
+      text: "Goa family package was perfect! The beaches were beautiful and the activities were well organized. Will definitely book through them again.",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
     },
     {
       id: 3,
-      name: "Emma Wilson",
-      location: "London, UK",
+      name: "Anjali Reddy",
+      location: "Bangalore, Karnataka",
       rating: 5,
-      text: "Perfect organization from start to finish. Tokyo was magical and the cultural experiences were unforgettable.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
+      text: "Kerala backwaters tour was magical! The houseboat experience was incredible and the food was delicious. Truly unforgettable!",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop"
     }
   ];
 
@@ -199,20 +199,26 @@ const Home = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <span className="text-2xl font-bold text-ocean-blue-600">
+                      <div className="mb-4">
+                        <div className="mb-2">
+                          <span className="text-3xl font-bold text-ocean-blue-600">
                             {formatCurrency(pkg.price)}
                           </span>
                           {pkg.originalPrice && (
-                            <span className="text-sm text-gray-500 line-through ml-2">
-                              {formatCurrency(pkg.originalPrice)}
-                            </span>
+                            <div className="flex items-center mt-1">
+                              <span className="text-base text-gray-500 line-through mr-2">
+                                {formatCurrency(pkg.originalPrice)}
+                              </span>
+                              <Badge variant="destructive" className="text-xs">
+                                Save {Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100)}%
+                              </Badge>
+                            </div>
                           )}
                         </div>
-                        <span className="text-sm text-gray-500">
-                          {pkg.reviews} reviews
-                        </span>
+                        <p className="text-sm text-gray-600 flex items-center">
+                          <FiStar className="text-yellow-400 mr-1" size={14} />
+                          {pkg.rating} rating • {pkg.reviews} reviews
+                        </p>
                       </div>
                       
                       <Link to={`/packages/${pkg._id}`}>
