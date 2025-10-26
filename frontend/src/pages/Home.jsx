@@ -6,6 +6,8 @@ import api from '../services/api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatCurrency } from '../utils/helpers';
 import { PackageGridSkeleton } from '../components/ui/PackageSkeleton';
 import { HeroSkeleton, StatsSkeleton, TestimonialsSkeleton } from '../components/ui/HeroSkeleton';
@@ -105,19 +107,19 @@ const Home = () => {
             >
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
-                  <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <input
+                  <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={20} />
+                  <Input
                     type="text"
                     placeholder="Where do you want to go?"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-mint-green-500"
+                    className="w-full pl-12 pr-4 py-4 text-gray-900 bg-white/90 backdrop-blur-sm border-white/20 focus:bg-white"
                   />
                 </div>
                 <Button
                   type="submit"
                   size="lg"
-                  className="px-8 py-4 bg-mint-green-600 hover:bg-mint-green-700"
+                  className="px-8 py-4 bg-mint-green-600 hover:bg-mint-green-700 shadow-lg"
                 >
                   Search Packages
                 </Button>
@@ -155,22 +157,23 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <Card className="overflow-hidden">
+                  <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
                     <div className="relative">
                       <img
                         src={pkg.images[0]}
                         alt={pkg.title}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-2 py-1 rounded-full">
-                        <span className="text-sm font-medium text-gray-900">
-                          {pkg.duration}
-                        </span>
-                      </div>
+                      <Badge className="absolute top-4 right-4 bg-white/90 text-gray-900 hover:bg-white">
+                        {pkg.duration}
+                      </Badge>
+                      <Badge variant="secondary" className="absolute top-4 left-4 bg-black/50 text-white hover:bg-black/70">
+                        {pkg.category}
+                      </Badge>
                     </div>
                     
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-2">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-3">
                         <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
                           {pkg.title}
                         </h3>
@@ -181,17 +184,17 @@ const Home = () => {
                       </div>
                       
                       <div className="flex items-center text-gray-600 mb-3">
-                        <FiMapPin size={16} className="mr-1" />
+                        <FiMapPin size={16} className="mr-2" />
                         <span className="text-sm">{pkg.destination}</span>
                       </div>
                       
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center text-gray-600">
-                          <FiUsers size={16} className="mr-1" />
+                          <FiUsers size={16} className="mr-2" />
                           <span className="text-sm">{pkg.groupSize}</span>
                         </div>
                         <div className="flex items-center text-gray-600">
-                          <FiClock size={16} className="mr-1" />
+                          <FiClock size={16} className="mr-2" />
                           <span className="text-sm">{pkg.difficulty}</span>
                         </div>
                       </div>
@@ -217,7 +220,7 @@ const Home = () => {
                           View Details
                         </Button>
                       </Link>
-                    </div>
+                    </CardContent>
                   </Card>
                 </motion.div>
               ))}
@@ -264,7 +267,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="text-center">
+                <Card className="text-center p-6">
                   <div className="flex justify-center mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <FiStar key={i} className="text-yellow-400" size={20} />
@@ -276,11 +279,10 @@ const Home = () => {
                   </p>
                   
                   <div className="flex items-center justify-center">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full mr-4"
-                    />
+                    <Avatar className="w-12 h-12 mr-4">
+                      <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                      <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
                     <div>
                       <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
                       <p className="text-sm text-gray-600">{testimonial.location}</p>
