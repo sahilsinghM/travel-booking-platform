@@ -32,6 +32,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Packages', path: '/packages' },
   ];
 
   return (
