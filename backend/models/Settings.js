@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const settingsSchema = new mongoose.Schema({
   siteInfo: {
-    name: { type: String, default: 'TravelBooking' },
+    name: { type: String, default: 'Travelqbx' },
     logoUrl: { type: String, default: '' }
   },
   contact: {
