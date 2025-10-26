@@ -70,21 +70,35 @@ const Booking = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmitBooking = async () => {
+  const handleSubmitBooking = () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+      alert('Please fill in all required fields in the traveler details section.');
+      setCurrentStep(1);
+      return;
+    }
+
     if (!paymentData.agreeToTerms) {
-      alert('Please agree to the terms and conditions');
+      alert('Please agree to the terms and conditions to proceed.');
       return;
     }
 
     setLoading(true);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      // Generate a booking ID
-      setBookingId(`BK${Date.now()}`);
-      setBookingComplete(true);
+    // Simulate API call with small delay
+    try {
+      setTimeout(() => {
+        // Generate a unique booking ID
+        const generatedId = `BK${Date.now()}`;
+        setBookingId(generatedId);
+        setBookingComplete(true);
+        setLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      alert('An error occurred while submitting your booking. Please try again.');
       setLoading(false);
-    }, 1000);
+    }
   };
 
   // Booking confirmation screen
@@ -364,11 +378,17 @@ const Booking = () => {
                     </Button>
                     <Button 
                       onClick={handleSubmitBooking} 
-                      loading={loading}
-                      disabled={!paymentData.agreeToTerms}
+                      disabled={!paymentData.agreeToTerms || loading}
                       size="lg"
                     >
-                      Submit Booking Request
+                      {loading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Submitting...
+                        </>
+                      ) : (
+                        'Submit Booking Request'
+                      )}
                     </Button>
                   </div>
                 </motion.div>
