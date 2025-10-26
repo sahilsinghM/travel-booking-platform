@@ -9,12 +9,19 @@
     "seed": "node seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["travel", "booking", "india", "api", "backend"],
+  "keywords": [
+    "travel",
+    "booking",
+    "india",
+    "api",
+    "backend"
+  ],
   "author": "Sahil Singh",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
