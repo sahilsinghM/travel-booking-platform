@@ -133,14 +133,26 @@ const settingsSchema = new mongoose.Schema({
 
 // Ensure only one settings document
 settingsSchema.statics.getSettings = async function() {
-  let settings = await this.findOne();
-  
-  if (!settings) {
-    // Create default settings
-    settings = await this.create({});
+  try {
+    let settings = await this.findOne();
+    
+    if (!settings) {
+      // Create default settings
+      settings = await this.create({});
+    }
+    
+    return settings;
+  } catch (error) {
+    console.error('Error in getSettings:', error.message);
+    // Return default settings if DB query fails
+    return {
+      siteInfo: { name: 'TravelBooking', logo: '', tagline: 'Discover amazing destinations' },
+      contact: { phone: '+91 9599667129', email: 'support@travelqbx.in', address: 'Gurugram, Haryana, India', socialMedia: {} },
+      homepage: { heroTitle: 'Discover Your Next Adventure', heroSubtitle: 'Explore breathtaking destinations', stats: { travelers: 5000, destinations: 50, reviews: 2500, satisfaction: 98 } },
+      footer: { companyInfo: 'Discover amazing destinations', destinations: [], quickLinks: [] },
+      testimonials: []
+    };
   }
-  
-  return settings;
 };
 
 module.exports = mongoose.model('Settings', settingsSchema);
