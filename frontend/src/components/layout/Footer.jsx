@@ -67,22 +67,22 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Bali, Indonesia
+                  Goa, India
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Swiss Alps
+                  Manali, Himachal Pradesh
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Tokyo, Japan
+                  Kerala Backwaters
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Santorini, Greece
+                  Andaman Islands
                 </a>
               </li>
             </ul>
@@ -94,17 +94,17 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <FiMail className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">support@travelbooking.com</span>
+                <span className="text-gray-300 text-sm">support@travelqbx.in</span>
               </div>
               <div className="flex items-center space-x-3">
                 <FiPhone className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">+1 (555) 123-4567</span>
+                <span className="text-gray-300 text-sm">+91 9599667129</span>
               </div>
               <div className="flex items-start space-x-3">
                 <FiMapPin className="text-ocean-blue-400 mt-1" size={18} />
                 <span className="text-gray-300 text-sm">
-                  123 Travel Street<br />
-                  Adventure City, AC 12345
+                  Gurugram<br />
+                  Haryana, India
                 </span>
               </div>
             </div>
