@@ -70,7 +70,7 @@ const Booking = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmitBooking = () => {
+  const handleSubmitBooking = async () => {
     // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
       alert('Please fill in all required fields in the traveler details section.');
@@ -85,15 +85,15 @@ const Booking = () => {
 
     setLoading(true);
 
-    // Simulate API call with small delay
     try {
-      setTimeout(() => {
-        // Generate a unique booking ID
-        const generatedId = `BK${Date.now()}`;
-        setBookingId(generatedId);
-        setBookingComplete(true);
-        setLoading(false);
-      }, 1000);
+      // Simulate API call with small delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Generate a unique booking ID
+      const generatedId = `BK${Date.now()}`;
+      setBookingId(generatedId);
+      setBookingComplete(true);
+      setLoading(false);
     } catch (error) {
       console.error('Booking submission error:', error);
       alert('An error occurred while submitting your booking. Please try again.');
