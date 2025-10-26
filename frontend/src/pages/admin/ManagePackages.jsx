@@ -23,6 +23,30 @@ const PackageEditForm = ({ package: pkg, onSave, onCancel }) => {
     setFormData(prev => ({ ...prev, [field]: newArray }));
   };
 
+  const addImage = (url) => {
+    if (url.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        images: [...(prev.images || []), url.trim()]
+      }));
+    }
+  };
+
+  const removeImage = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleNewImageUrlChange = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addImage(e.target.value);
+      e.target.value = '';
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Convert string fields to appropriate types
@@ -139,6 +163,67 @@ const PackageEditForm = ({ package: pkg, onSave, onCancel }) => {
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
           required
         />
+      </div>
+
+      {/* Images Section */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Package Images</label>
+        
+        {/* Current Images */}
+        {formData.images && formData.images.length > 0 && (
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            {formData.images.map((img, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={img}
+                  alt={`Image ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-lg border border-gray-300"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/400x300?text=Invalid+URL';
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remove image"
+                >
+                  <FiX size={16} />
+                </button>
+                <input
+                  type="text"
+                  value={img}
+                  onChange={(e) => handleArrayChange(e, 'images', index)}
+                  className="mt-2 w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-ocean-blue-500"
+                  placeholder="Image URL"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Add New Image */}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Enter image URL and press Enter to add"
+            onKeyDown={handleNewImageUrlChange}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500 text-sm"
+          />
+          <button
+            type="button"
+            onClick={(e) => {
+              const input = e.target.previousElementSibling;
+              if (input) {
+                addImage(input.value);
+                input.value = '';
+              }
+            }}
+            className="px-4 py-2 bg-ocean-blue-600 text-white rounded-md hover:bg-ocean-blue-700 focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+          >
+            Add Image
+          </button>
+        </div>
       </div>
 
       <div className="flex justify-end space-x-4 pt-4">
