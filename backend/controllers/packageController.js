@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Package = require('../models/Package');
+const { invalidateCache } = require('../middleware/cache');
 
 // @desc    Get all packages
 // @route   GET /api/packages
@@ -30,14 +31,14 @@ const getPackages = async (req, res, next) => {
     }
     
     if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { destination: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
+      query.$text = { $search: search };
     }
 
-    const packages = await Package.find(query).sort({ createdAt: -1 });
+    // Use lean() for better performance on read-only queries
+    const packages = await Package.find(query)
+      .lean()
+      .sort({ createdAt: -1 })
+      .limit(50); // Limit results for better performance
     
     res.json({
       success: true,
@@ -88,6 +89,9 @@ const createPackage = async (req, res, next) => {
 
     const package = await Package.create(req.body);
     
+    // Invalidate cache after creating package
+    invalidateCache('packages');
+    
     res.status(201).json({
       success: true,
       data: package
@@ -124,6 +128,9 @@ const updatePackage = async (req, res, next) => {
       });
     }
     
+    // Invalidate cache after updating package
+    invalidateCache('packages');
+    
     res.json({
       success: true,
       data: package
@@ -146,6 +153,9 @@ const deletePackage = async (req, res, next) => {
         message: 'Package not found'
       });
     }
+    
+    // Invalidate cache after deleting package
+    invalidateCache('packages');
     
     res.json({
       success: true,

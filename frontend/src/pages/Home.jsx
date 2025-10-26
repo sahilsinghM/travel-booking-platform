@@ -3,14 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiCalendar, FiStar, FiUsers, FiClock } from 'react-icons/fi';
 import api from '../services/api';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '../utils/helpers';
+import { PackageGridSkeleton, HeroSkeleton, StatsSkeleton, TestimonialsSkeleton } from '../components/ui/PackageSkeleton';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredPackages, setFeaturedPackages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,12 +22,15 @@ const Home = () => {
 
   const loadFeaturedPackages = async () => {
     try {
+      setShowSkeleton(true);
       const packages = await api.getPackages();
       setFeaturedPackages(packages.slice(0, 4)); // Show first 4 packages
     } catch (error) {
       console.error('Failed to load packages:', error);
     } finally {
       setLoading(false);
+      // Show skeleton for a minimum time for better UX
+      setTimeout(() => setShowSkeleton(false), 1000);
     }
   };
 
@@ -137,16 +143,8 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="animate-pulse">
-                  <div className="bg-gray-300 rounded-xl h-64 mb-4"></div>
-                  <div className="bg-gray-300 rounded h-4 mb-2"></div>
-                  <div className="bg-gray-300 rounded h-4 w-3/4"></div>
-                </div>
-              ))}
-            </div>
+          {showSkeleton ? (
+            <PackageGridSkeleton count={4} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredPackages.map((pkg, index) => (

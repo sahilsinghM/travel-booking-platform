@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
+const { cache } = require('./middleware/cache');
 
 // Load env vars
 dotenv.config();
@@ -38,6 +39,9 @@ app.use(cors({
   },
   credentials: true
 }));
+
+// Apply caching middleware to packages route
+app.use('/api/packages', cache(5 * 60 * 1000)); // 5 minutes cache
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

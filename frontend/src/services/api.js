@@ -1,7 +1,12 @@
 // Real API service for backend integration
+import cacheService from './cacheService';
+
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://travel-booking-platform-2i9o.onrender.com/api'
   : 'http://localhost:5000/api';
+
+// Request deduplication
+const pendingRequests = new Map();
 
 // Utility function to get auth headers
 const getAuthHeaders = () => {
@@ -21,6 +26,23 @@ const handleResponse = async (response) => {
   }
   
   return data;
+};
+
+// Deduplication helper
+const deduplicateRequest = async (key, requestFn) => {
+  if (pendingRequests.has(key)) {
+    return pendingRequests.get(key);
+  }
+
+  const promise = requestFn();
+  pendingRequests.set(key, promise);
+
+  try {
+    const result = await promise;
+    return result;
+  } finally {
+    pendingRequests.delete(key);
+  }
 };
 
 // API service object
@@ -88,26 +110,55 @@ const api = {
 
   // Travel Packages
   async getPackages(filters = {}) {
-    const queryParams = new URLSearchParams();
+    const cacheKey = `packages_${JSON.stringify(filters)}`;
     
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        queryParams.append(key, filters[key]);
-      }
+    // Check cache first
+    const cachedData = cacheService.get(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // Make API request with deduplication
+    const packages = await deduplicateRequest(cacheKey, async () => {
+      const queryParams = new URLSearchParams();
+      
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) {
+          queryParams.append(key, filters[key]);
+        }
+      });
+      
+      const url = `${API_BASE_URL}/packages${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+      const response = await fetch(url);
+      const data = await handleResponse(response);
+      
+      return data.data || [];
     });
+
+    // Cache the result
+    cacheService.set(cacheKey, packages, 5 * 60 * 1000); // 5 minutes
     
-    const url = `${API_BASE_URL}/packages${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-    const response = await fetch(url);
-    const data = await handleResponse(response);
-    
-    return data.data || [];
+    return packages;
   },
 
   async getPackageById(id) {
+    // Check cache first
+    const cachedData = cacheService.getPackageDetails(id);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // Make API request
     const response = await fetch(`${API_BASE_URL}/packages/${id}`);
     const data = await handleResponse(response);
+    const packageData = data.data || null;
     
-    return data.data || null;
+    // Cache the result
+    if (packageData) {
+      cacheService.setPackageDetails(id, packageData);
+    }
+    
+    return packageData;
   },
 
   async createPackage(packageData) {
@@ -118,6 +169,10 @@ const api = {
     });
     
     const data = await handleResponse(response);
+    
+    // Invalidate cache after creating package
+    cacheService.invalidatePackages();
+    
     return data.data;
   },
 
@@ -129,6 +184,11 @@ const api = {
     });
     
     const data = await handleResponse(response);
+    
+    // Invalidate cache after updating package
+    cacheService.invalidatePackages();
+    cacheService.delete(`cache_package_${id}`);
+    
     return data.data;
   },
 
@@ -137,6 +197,10 @@ const api = {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
+    
+    // Invalidate cache after deleting package
+    cacheService.invalidatePackages();
+    cacheService.delete(`cache_package_${id}`);
     
     return response.ok;
   },

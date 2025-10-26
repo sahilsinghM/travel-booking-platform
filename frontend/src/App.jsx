@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { HelmetProvider } from 'react-helmet-async';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import keepAliveService from './services/keepAlive';
 
 // Pages
 import Home from './pages/Home';
@@ -21,6 +22,15 @@ import ManageBookings from './pages/admin/ManageBookings';
 import ManageUsers from './pages/admin/ManageUsers';
 
 function App() {
+  useEffect(() => {
+    // Start keep-alive service to prevent backend cold starts
+    keepAliveService.start();
+    
+    // Cleanup on unmount
+    return () => {
+      keepAliveService.stop();
+    };
+  }, []);
   return (
     <HelmetProvider>
       <AuthProvider>

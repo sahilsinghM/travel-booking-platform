@@ -89,4 +89,12 @@ const packageSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Add indexes for better query performance
+packageSchema.index({ destination: 1 });
+packageSchema.index({ price: 1 });
+packageSchema.index({ category: 1 });
+packageSchema.index({ createdAt: -1 });
+packageSchema.index({ rating: -1 });
+packageSchema.index({ title: 'text', destination: 'text', description: 'text' });
+
 module.exports = mongoose.model('Package', packageSchema);
