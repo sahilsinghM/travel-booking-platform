@@ -1,11 +1,157 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiX } from 'react-icons/fi';
 import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { formatCurrency } from '../../utils/helpers';
+
+// Package Edit Form Component
+const PackageEditForm = ({ package: pkg, onSave, onCancel }) => {
+  const [formData, setFormData] = useState({ ...pkg });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleArrayChange = (e, field, index) => {
+    const { value } = e.target;
+    const newArray = [...formData[field]];
+    newArray[index] = value;
+    setFormData(prev => ({ ...prev, [field]: newArray }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Convert string fields to appropriate types
+    const updatedPackage = {
+      ...formData,
+      price: parseFloat(formData.price),
+      originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
+      rating: parseFloat(formData.rating),
+      reviews: parseInt(formData.reviews),
+      availability: parseInt(formData.availability)
+    };
+    onSave(updatedPackage);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+          <input
+            type="text"
+            name="destination"
+            value={formData.destination}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+          <input
+            type="text"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          >
+            <option value="Beach">Beach</option>
+            <option value="Mountain">Mountain</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Heritage">Heritage</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Original Price (₹)</label>
+          <input
+            type="number"
+            name="originalPrice"
+            value={formData.originalPrice || ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+          <input
+            type="number"
+            name="availability"
+            value={formData.availability}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          rows={4}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-ocean-blue-500"
+          required
+        />
+      </div>
+
+      <div className="flex justify-end space-x-4 pt-4">
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit">
+          Save Changes
+        </Button>
+      </div>
+    </form>
+  );
+};
 
 const ManagePackages = () => {
   const [packages, setPackages] = useState([]);
@@ -26,6 +172,19 @@ const ManagePackages = () => {
       console.error('Failed to load packages:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (updatedPackage) => {
+    try {
+      await api.updatePackage(updatedPackage._id, updatedPackage);
+      setPackages(packages.map(pkg => 
+        pkg._id === updatedPackage._id ? updatedPackage : pkg
+      ));
+      setEditingPackage(null);
+    } catch (error) {
+      console.error('Failed to update package:', error);
+      alert('Failed to update package');
     }
   };
 
@@ -192,6 +351,27 @@ const ManagePackages = () => {
                   Delete
                 </Button>
               </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Edit Package Modal */}
+        {editingPackage && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Edit Package</h3>
+              
+              <PackageEditForm
+                package={editingPackage}
+                onSave={(updatedPackage) => {
+                  handleUpdate(updatedPackage);
+                }}
+                onCancel={() => setEditingPackage(null)}
+              />
             </motion.div>
           </div>
         )}
