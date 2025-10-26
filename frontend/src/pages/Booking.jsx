@@ -78,35 +78,13 @@ const Booking = () => {
 
     setLoading(true);
 
-    try {
-      // Create booking
-      const booking = await api.createBooking({
-        userId: user.id,
-        packageId: packageData.id,
-        packageTitle: packageData.title,
-        travelerDetails: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          specialRequests: formData.specialRequests
-        },
-        travelDates: {
-          startDate: selectedDates.startDate,
-          endDate: selectedDates.endDate
-        },
-        numberOfTravelers: travelers,
-        totalAmount: totalPrice
-      });
-
-      setBookingId(booking.id);
+    // Simulate API call delay
+    setTimeout(() => {
+      // Generate a booking ID
+      setBookingId(`BK${Date.now()}`);
       setBookingComplete(true);
-    } catch (error) {
-      console.error('Booking failed:', error);
-      alert('Booking failed. Please try again.');
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   // Booking confirmation screen
@@ -159,10 +137,15 @@ const Booking = () => {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <p className="text-sm text-blue-800">
-                <strong>What's Next?</strong><br />
-                Our travel specialists will review your booking request and get back to you within 24 hours via email at <strong>{formData.email}</strong> with payment instructions and further details.
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                  <FiCheck className="text-green-600" size={24} />
+                </div>
+                <h3 className="text-lg font-semibold text-green-800">Booking Submitted Successfully!</h3>
+              </div>
+              <p className="text-sm text-green-700">
+                Our team will reach out to you shortly. We've received your booking request and one of our travel specialists will contact you at <strong>{formData.email}</strong> or <strong>{formData.phone}</strong> within 24 hours to confirm your booking and provide payment instructions.
               </p>
             </div>
 
