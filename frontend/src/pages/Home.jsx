@@ -317,12 +317,12 @@ const Home = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/packages">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-ocean-blue-600">
+                <Button size="lg" variant="secondary" className="bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white hover:text-ocean-blue-600 hover:border-white">
                   Browse Packages
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button size="lg" className="bg-white text-ocean-blue-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-ocean-blue-600 hover:bg-gray-100 shadow-lg">
                   Create Account
                 </Button>
               </Link>
