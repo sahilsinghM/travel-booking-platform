@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiMail, FiPhone, FiMapPin, FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
+import api from '../../services/api';
 
 const Footer = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const data = await api.getSettings();
+      setSettings(data);
+    } catch (error) {
+      console.error('Failed to load settings:', error);
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -13,24 +29,32 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-ocean-blue-600 to-mint-green-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">T</span>
               </div>
-              <span className="text-xl font-bold">TravelBooking</span>
+              <span className="text-xl font-bold">{settings?.siteInfo?.name || 'TravelBooking'}</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Discover amazing destinations and create unforgettable memories with our carefully curated travel packages.
+              {settings?.footer?.companyInfo || 'Discover amazing destinations and create unforgettable memories with our carefully curated travel packages.'}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
-                <FiFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
-                <FiTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
-                <FiInstagram size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
-                <FiLinkedin size={20} />
-              </a>
+              {settings?.contact?.socialMedia?.facebook && (
+                <a href={settings.contact.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
+                  <FiFacebook size={20} />
+                </a>
+              )}
+              {settings?.contact?.socialMedia?.twitter && (
+                <a href={settings.contact.socialMedia.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
+                  <FiTwitter size={20} />
+                </a>
+              )}
+              {settings?.contact?.socialMedia?.instagram && (
+                <a href={settings.contact.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
+                  <FiInstagram size={20} />
+                </a>
+              )}
+              {settings?.contact?.socialMedia?.linkedin && (
+                <a href={settings.contact.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-ocean-blue-400 transition-colors duration-200">
+                  <FiLinkedin size={20} />
+                </a>
+              )}
             </div>
           </div>
 
@@ -65,26 +89,13 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Popular Destinations</h3>
             <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Goa, India
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Manali, Himachal Pradesh
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Kerala Backwaters
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Andaman Islands
-                </a>
-              </li>
+              {(settings?.footer?.destinations || ['Goa, India', 'Manali, Himachal Pradesh', 'Kerala Backwaters', 'Andaman Islands']).slice(0, 4).map((destination, index) => (
+                <li key={index}>
+                  <a href="#" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
+                    {destination}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -94,17 +105,16 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <FiMail className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">support@travelqbx.in</span>
+                <span className="text-gray-300 text-sm">{settings?.contact?.email || 'support@travelqbx.in'}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <FiPhone className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">+91 9599667129</span>
+                <span className="text-gray-300 text-sm">{settings?.contact?.phone || '+91 9599667129'}</span>
               </div>
               <div className="flex items-start space-x-3">
                 <FiMapPin className="text-ocean-blue-400 mt-1" size={18} />
                 <span className="text-gray-300 text-sm">
-                  Gurugram<br />
-                  Haryana, India
+                  {settings?.contact?.address || 'Gurugram, Haryana, India'}
                 </span>
               </div>
             </div>
