@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
 const allowedOrigins = [
+  'https://travelqbx.in',
   'https://travel-booking-platform-dtyh.vercel.app',
   'https://travel-booking-platform.vercel.app',
   'http://localhost:5173',
