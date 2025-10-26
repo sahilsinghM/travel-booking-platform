@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-// const connectDB = require('./config/db');
+const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 const { cache } = require('./middleware/cache');
 
@@ -9,11 +9,11 @@ const { cache } = require('./middleware/cache');
 dotenv.config();
 
 // Connect to database (with error handling)
-// setTimeout(() => {
-//   connectDB().catch(err => {
-//     console.error('Database connection failed:', err.message);
-//   });
-// }, 1000); // Delay DB connection by 1 second to let server start first
+setTimeout(() => {
+  connectDB().catch(err => {
+    console.error('Database connection failed:', err.message);
+  });
+}, 1000); // Delay DB connection by 1 second to let server start first
 
 const app = express();
 
