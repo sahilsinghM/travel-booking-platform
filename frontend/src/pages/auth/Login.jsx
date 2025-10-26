@@ -47,18 +47,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ocean-blue-50 to-mint-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-ocean-blue-50 to-mint-green-50 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md w-full space-y-8"
+        className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-10"
       >
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <div className="mb-8">
+          <h2 className="text-4xl font-bold text-gray-900 text-center mb-3">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-gray-600 text-lg">
             Or{' '}
             <Link
               to="/signup"
@@ -69,47 +69,46 @@ const Login = () => {
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-ocean-blue-500 focus:border-ocean-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-ocean-blue-500 focus:border-ocean-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email" className="block text-base font-medium text-gray-700 mb-2">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="appearance-none relative block w-full px-4 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-blue-500 focus:border-ocean-blue-500"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="password" className="block text-base font-medium text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              className="appearance-none relative block w-full px-4 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-blue-500 focus:border-ocean-blue-500"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
 
           {error && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm"
+              className="bg-red-50 border border-red-200 text-red-600 px-4 py-4 rounded-lg text-base"
             >
               {error}
             </motion.div>
@@ -119,24 +118,14 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-ocean-blue-600 hover:bg-ocean-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ocean-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-4 px-4 border border-transparent text-base font-semibold rounded-lg text-white bg-ocean-blue-600 hover:bg-ocean-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ocean-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
               ) : (
                 'Sign in'
               )}
             </button>
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Demo credentials:
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              Admin: admin@travelbooking.com / admin123<br />
-              User: john@example.com / password123
-            </p>
           </div>
         </form>
       </motion.div>
@@ -145,5 +134,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
