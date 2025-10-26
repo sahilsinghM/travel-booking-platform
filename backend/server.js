@@ -75,6 +75,67 @@ app.post('/api/seed', async (req, res) => {
   }
 });
 
+// Import CSV endpoint (temporary - remove in production)
+const importCsv = async () => {
+  const fs = require('fs');
+  const csvParser = require('csv-parser');
+  const path = require('path');
+  const Package = require('./models/Package');
+
+  return new Promise((resolve, reject) => {
+    const packages = [];
+    const csvPath = path.join(__dirname, 'pre_data', '100data.csv');
+
+    fs.createReadStream(csvPath)
+      .pipe(csvParser())
+      .on('data', (row) => {
+        const packageData = {
+          title: row.title.trim(),
+          destination: row.destination.trim(),
+          duration: row.duration.trim(),
+          price: parseFloat(row.price),
+          originalPrice: row.originalPrice ? parseFloat(row.originalPrice) : undefined,
+          rating: parseFloat(row.rating),
+          reviews: parseInt(row.reviews),
+          description: row.description.trim(),
+          category: row.category.trim(),
+          difficulty: row.difficulty.trim(),
+          groupSize: row.groupSize.trim(),
+          bestTime: row.bestTime.trim(),
+          availability: parseInt(row.availability),
+          images: row.images ? row.images.split(',').map(img => img.trim()) : [],
+          itinerary: row.itinerary ? row.itinerary.split(';').map(item => item.trim()) : [],
+          inclusions: row.inclusions ? row.inclusions.split(',').map(item => item.trim()) : [],
+          exclusions: row.exclusions ? row.exclusions.split(',').map(item => item.trim()) : []
+        };
+        packages.push(packageData);
+      })
+      .on('end', async () => {
+        try {
+          await Package.deleteMany({});
+          const inserted = await Package.insertMany(packages);
+          resolve({ count: inserted.length, packages });
+        } catch (err) {
+          reject(err);
+        }
+      })
+      .on('error', reject);
+  });
+};
+
+app.post('/api/import-csv', async (req, res) => {
+  try {
+    const result = await importCsv();
+    res.json({ 
+      success: true, 
+      message: `Successfully imported ${result.count} packages`,
+      count: result.count 
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // Error handler
 app.use(errorHandler);
 
