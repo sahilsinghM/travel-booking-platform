@@ -35,17 +35,23 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Attempting login with:', email);
       const response = await api.login(email, password);
+      console.log('Login response:', response);
       
       if (response.success) {
         setUser(response.user);
-        return { success: true };
+        console.log('User set:', response.user);
+        return { success: true, user: response.user };
       } else {
-        setError(response.message);
-        return { success: false, message: response.message };
+        const errorMsg = response.message || 'Login failed';
+        setError(errorMsg);
+        console.error('Login failed:', errorMsg);
+        return { success: false, message: errorMsg };
       }
     } catch (err) {
-      const errorMessage = 'Login failed. Please try again.';
+      console.error('Login error:', err);
+      const errorMessage = err.message || 'Login failed. Please try again.';
       setError(errorMessage);
       return { success: false, message: errorMessage };
     } finally {

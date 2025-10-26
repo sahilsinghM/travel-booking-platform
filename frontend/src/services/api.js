@@ -49,22 +49,30 @@ const deduplicateRequest = async (key, requestFn) => {
 const api = {
   // Authentication
   async login(email, password) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
-    
-    const data = await handleResponse(response);
-    
-    if (data.success) {
-      localStorage.setItem('authToken', data.token);
-      return { success: true, user: data.user, token: data.token };
+    try {
+      console.log('Making login request to:', `${API_BASE_URL}/auth/login`);
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+      
+      console.log('Login response status:', response.status);
+      const data = await response.json();
+      console.log('Login response data:', data);
+      
+      if (response.ok && data.success) {
+        localStorage.setItem('authToken', data.token);
+        return { success: true, user: data.user, token: data.token };
+      }
+      
+      return { success: false, message: data.message || 'Login failed' };
+    } catch (err) {
+      console.error('Login fetch error:', err);
+      return { success: false, message: 'Network error. Please try again.' };
     }
-    
-    return { success: false, message: data.message };
   },
 
   async register(userData) {
