@@ -65,6 +65,17 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Seed endpoint (temporary - remove in production)
+const seedDatabase = require('./seed');
+app.post('/api/seed', async (req, res) => {
+  try {
+    await seedDatabase();
+    res.json({ success: true, message: 'Database seeded successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // Error handler
 app.use(errorHandler);
 
