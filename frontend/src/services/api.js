@@ -261,6 +261,24 @@ const api = {
     const data = await handleResponse(response);
     
     return data.data || [];
+  },
+
+  // Settings
+  async getSettings() {
+    const response = await fetch(`${API_BASE_URL}/settings`);
+    const data = await handleResponse(response);
+    return data.data || null;
+  },
+
+  async updateSettings(settingsData) {
+    const response = await fetch(`${API_BASE_URL}/settings`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(settingsData)
+    });
+    
+    const data = await handleResponse(response);
+    return data.data;
   }
 };
 

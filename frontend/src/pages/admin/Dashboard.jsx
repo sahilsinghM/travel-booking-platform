@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiPackage, FiDollarSign, FiUsers, FiCalendar, FiTrendingUp } from 'react-icons/fi';
-import mockApi from '../../services/mockApi';
+import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import { formatCurrency } from '../../utils/helpers';
 
@@ -23,9 +23,9 @@ const Dashboard = () => {
   const loadDashboardData = async () => {
     try {
       const [packages, bookings, users] = await Promise.all([
-        mockApi.getPackages(),
-        mockApi.getBookings(),
-        mockApi.getUsers()
+        api.getPackages(),
+        api.getBookings(),
+        api.getUsers()
       ]);
 
       const totalRevenue = bookings.reduce((sum, booking) => {
@@ -153,7 +153,7 @@ const Dashboard = () => {
               <div className="space-y-4">
                 {recentBookings.length > 0 ? (
                   recentBookings.map((booking) => (
-                    <div key={booking.id} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                    <div key={booking._id} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900">{booking.packageTitle}</h3>
                         <p className="text-sm text-gray-600">
@@ -209,6 +209,12 @@ const Dashboard = () => {
                   className="block w-full px-4 py-3 bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg font-medium transition-colors"
                 >
                   Manage Users
+                </Link>
+                <Link
+                  to="/admin/settings"
+                  className="block w-full px-4 py-3 bg-white border-2 border-purple-600 text-purple-600 hover:bg-purple-50 rounded-lg font-medium transition-colors"
+                >
+                  Site Settings
                 </Link>
               </div>
             </Card>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from 'react-icons/fi';
-import mockApi from '../../services/mockApi';
+import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { formatCurrency } from '../../utils/helpers';
@@ -20,7 +20,7 @@ const ManagePackages = () => {
 
   const loadPackages = async () => {
     try {
-      const data = await mockApi.getPackages();
+      const data = await api.getPackages();
       setPackages(data);
     } catch (error) {
       console.error('Failed to load packages:', error);
@@ -31,8 +31,8 @@ const ManagePackages = () => {
 
   const handleDelete = async (id) => {
     try {
-      await mockApi.deletePackage(id);
-      setPackages(packages.filter(pkg => pkg.id !== id));
+      await api.deletePackage(id);
+      setPackages(packages.filter(pkg => pkg._id !== id));
       setShowDeleteConfirm(null);
     } catch (error) {
       console.error('Failed to delete package:', error);
@@ -112,7 +112,7 @@ const ManagePackages = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredPackages.map((pkg) => (
-                  <tr key={pkg.id} className="hover:bg-gray-50">
+                  <tr key={pkg._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <img
@@ -153,7 +153,7 @@ const ManagePackages = () => {
                         <FiEdit2 size={18} />
                       </button>
                       <button
-                        onClick={() => setShowDeleteConfirm(pkg.id)}
+                        onClick={() => setShowDeleteConfirm(pkg._id)}
                         className="text-red-600 hover:text-red-900"
                       >
                         <FiTrash2 size={18} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiMail, FiUser, FiShield, FiSearch } from 'react-icons/fi';
-import mockApi from '../../services/mockApi';
+import api from '../../services/api';
 import Card from '../../components/ui/Card';
 
 const ManageUsers = () => {
@@ -15,7 +15,7 @@ const ManageUsers = () => {
 
   const loadUsers = async () => {
     try {
-      const data = await mockApi.getUsers();
+      const data = await api.getUsers();
       setUsers(data);
     } catch (error) {
       console.error('Failed to load users:', error);
@@ -65,7 +65,7 @@ const ManageUsers = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredUsers.map((user, index) => (
             <motion.div
-              key={user.id}
+              key={user._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
@@ -101,7 +101,7 @@ const ManageUsers = () => {
                   </div>
                   <div className="flex items-center text-gray-600">
                     <FiUser size={14} className="mr-2" />
-                    <span>User ID: #{user.id}</span>
+                    <span>User ID: #{user._id}</span>
                   </div>
                 </div>
               </Card>

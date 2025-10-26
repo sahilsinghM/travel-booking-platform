@@ -20,6 +20,7 @@ import Dashboard from './pages/admin/Dashboard';
 import ManagePackages from './pages/admin/ManagePackages';
 import ManageBookings from './pages/admin/ManageBookings';
 import ManageUsers from './pages/admin/ManageUsers';
+import SiteSettings from './pages/admin/SiteSettings';
 
 function App() {
   useEffect(() => {
@@ -86,6 +87,14 @@ function App() {
                   element={
                     <ProtectedRoute requireAdmin>
                       <ManageUsers />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/settings"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <SiteSettings />
                     </ProtectedRoute>
                   }
                 />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiUser, FiDollarSign, FiFilter } from 'react-icons/fi';
-import mockApi from '../../services/mockApi';
+import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { formatCurrency } from '../../utils/helpers';
@@ -17,7 +17,7 @@ const ManageBookings = () => {
 
   const loadBookings = async () => {
     try {
-      const data = await mockApi.getBookings();
+      const data = await api.getBookings();
       setBookings(data);
     } catch (error) {
       console.error('Failed to load bookings:', error);
@@ -28,9 +28,9 @@ const ManageBookings = () => {
 
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
-      await mockApi.updateBookingStatus(bookingId, newStatus);
+      await api.updateBookingStatus(bookingId, newStatus);
       setBookings(bookings.map(booking => 
-        booking.id === bookingId ? { ...booking, status: newStatus } : booking
+        booking._id === bookingId ? { ...booking, status: newStatus } : booking
       ));
     } catch (error) {
       console.error('Failed to update booking status:', error);
@@ -102,7 +102,7 @@ const ManageBookings = () => {
           {filteredBookings.length > 0 ? (
             filteredBookings.map((booking, index) => (
               <motion.div
-                key={booking.id}
+                key={booking._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
@@ -116,7 +116,7 @@ const ManageBookings = () => {
                           <h3 className="text-lg font-semibold text-gray-900 mb-1">
                             {booking.packageTitle}
                           </h3>
-                          <p className="text-sm text-gray-600">Booking ID: #{booking.id}</p>
+                          <p className="text-sm text-gray-600">Booking ID: #{booking._id}</p>
                         </div>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
                           {booking.status}
@@ -158,14 +158,14 @@ const ManageBookings = () => {
                           <Button
                             size="sm"
                             variant="secondary"
-                            onClick={() => handleStatusChange(booking.id, 'confirmed')}
+                            onClick={() => handleStatusChange(booking._id, 'confirmed')}
                           >
                             Confirm
                           </Button>
                           <Button
                             size="sm"
                             variant="danger"
-                            onClick={() => handleStatusChange(booking.id, 'cancelled')}
+                            onClick={() => handleStatusChange(booking._id, 'cancelled')}
                           >
                             Cancel
                           </Button>
