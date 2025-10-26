@@ -270,13 +270,13 @@ const Packages = () => {
                           <Badge className="absolute top-4 right-4 bg-white/90 text-gray-900 hover:bg-white">
                             {pkg.duration}
                           </Badge>
-                          <Badge variant="secondary" className="absolute top-4 left-4 bg-ocean-blue-600 text-white hover:bg-ocean-blue-700">
+                          <Badge variant="secondary" className="absolute top-4 left-4 bg-black/50 text-white hover:bg-black/70">
                             {pkg.category}
                           </Badge>
                         </div>
                         
                         <CardContent className="p-6 flex flex-col h-full">
-                          <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center justify-between mb-3">
                             <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
                               {pkg.title}
                             </h3>
@@ -287,26 +287,22 @@ const Packages = () => {
                           </div>
                           
                           <div className="flex items-center text-gray-600 mb-3">
-                            <FiMapPin size={16} className="mr-1" />
+                            <FiMapPin size={16} className="mr-2" />
                             <span className="text-sm">{pkg.destination}</span>
                           </div>
                           
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
-                            {pkg.description}
-                          </p>
-                          
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center text-gray-600">
-                              <FiUsers size={16} className="mr-1" />
+                              <FiUsers size={16} className="mr-2" />
                               <span className="text-sm">{pkg.groupSize}</span>
                             </div>
                             <div className="flex items-center text-gray-600">
-                              <FiClock size={16} className="mr-1" />
+                              <FiClock size={16} className="mr-2" />
                               <span className="text-sm">{pkg.difficulty}</span>
                             </div>
                           </div>
                           
-                          <div className="mb-4">
+                          <div className="mb-4 flex-grow">
                             <div className="mb-2">
                               <span className="text-3xl font-bold text-ocean-blue-600">
                                 {formatCurrency(pkg.price)}
