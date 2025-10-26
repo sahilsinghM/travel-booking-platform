@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
+import { FiAlertCircle } from 'react-icons/fi';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -221,11 +222,16 @@ const Signup = () => {
 
           {error && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-red-50 border border-red-200 text-red-600 px-4 py-4 rounded-lg text-base"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="bg-red-50 border-2 border-red-300 text-red-700 px-5 py-4 rounded-lg flex items-start space-x-3"
             >
-              {error}
+              <FiAlertCircle className="flex-shrink-0 mt-0.5" size={20} />
+              <div>
+                <p className="font-semibold text-base mb-1">Registration Failed</p>
+                <p className="text-sm">{error}</p>
+              </div>
             </motion.div>
           )}
 
