@@ -3,14 +3,18 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiStar, FiUsers, FiClock, FiFilter, FiX } from 'react-icons/fi';
 import api from '../services/api';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { PackageGridSkeleton } from '../components/ui/PackageSkeleton';
 import { formatCurrency } from '../utils/helpers';
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
@@ -31,6 +35,7 @@ const Packages = () => {
   const loadPackages = async () => {
     try {
       setLoading(true);
+      setShowSkeleton(true);
       const filterParams = {};
       
       if (filters.search) filterParams.search = filters.search;
@@ -47,6 +52,8 @@ const Packages = () => {
       console.error('Failed to load packages:', error);
     } finally {
       setLoading(false);
+      // Show skeleton for a minimum time for better UX
+      setTimeout(() => setShowSkeleton(false), 1000);
     }
   };
 
@@ -99,15 +106,17 @@ const Packages = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <Card>
+            <Card className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">Filters</h2>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShowFilters(false)}
-                  className="lg:hidden text-gray-400 hover:text-gray-600"
+                  className="lg:hidden"
                 >
                   <FiX size={20} />
-                </button>
+                </Button>
               </div>
 
               <form onSubmit={handleSearch} className="space-y-6">
@@ -117,13 +126,13 @@ const Packages = () => {
                     Search
                   </label>
                   <div className="relative">
-                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                    <input
+                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={18} />
+                    <Input
                       type="text"
                       placeholder="Search destinations..."
                       value={filters.search}
                       onChange={(e) => handleFilterChange('search', e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue-500 focus:border-transparent"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -133,12 +142,11 @@ const Packages = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Destination
                   </label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="Enter destination..."
                     value={filters.destination}
                     onChange={(e) => handleFilterChange('destination', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -165,19 +173,17 @@ const Packages = () => {
                     Price Range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <input
+                    <Input
                       type="number"
                       placeholder="Min"
                       value={filters.minPrice}
                       onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue-500 focus:border-transparent"
                     />
-                    <input
+                    <Input
                       type="number"
                       placeholder="Max"
                       value={filters.maxPrice}
                       onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -242,16 +248,8 @@ const Packages = () => {
             </div>
 
             {/* Packages Grid */}
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, index) => (
-                  <div key={index} className="animate-pulse">
-                    <div className="bg-gray-300 rounded-xl h-64 mb-4"></div>
-                    <div className="bg-gray-300 rounded h-4 mb-2"></div>
-                    <div className="bg-gray-300 rounded h-4 w-3/4"></div>
-                  </div>
-                ))}
-              </div>
+            {showSkeleton ? (
+              <PackageGridSkeleton count={6} />
             ) : currentPackages.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentPackages.map((pkg, index) => (
@@ -261,24 +259,22 @@ const Packages = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                   >
-                    <Card className="overflow-hidden">
+                    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
                       <div className="relative">
                         <img
                           src={pkg.images[0]}
                           alt={pkg.title}
-                          className="w-full h-48 object-cover"
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-2 py-1 rounded-full">
-                          <span className="text-sm font-medium text-gray-900">
-                            {pkg.duration}
-                          </span>
-                        </div>
-                        <div className="absolute top-4 left-4 bg-ocean-blue-600 text-white px-2 py-1 rounded-full">
-                          <span className="text-sm font-medium">{pkg.category}</span>
-                        </div>
+                        <Badge className="absolute top-4 right-4 bg-white/90 text-gray-900 hover:bg-white">
+                          {pkg.duration}
+                        </Badge>
+                        <Badge variant="secondary" className="absolute top-4 left-4 bg-ocean-blue-600 text-white hover:bg-ocean-blue-700">
+                          {pkg.category}
+                        </Badge>
                       </div>
                       
-                      <div className="p-6">
+                      <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
                             {pkg.title}
@@ -330,7 +326,7 @@ const Packages = () => {
                             View Details
                           </Button>
                         </Link>
-                      </div>
+                      </CardContent>
                     </Card>
                   </motion.div>
                 ))}
