@@ -7,7 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '../utils/helpers';
-import { PackageGridSkeleton, HeroSkeleton, StatsSkeleton, TestimonialsSkeleton } from '../components/ui/PackageSkeleton';
+import { PackageGridSkeleton } from '../components/ui/PackageSkeleton';
+import { HeroSkeleton, StatsSkeleton, TestimonialsSkeleton } from '../components/ui/HeroSkeleton';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
