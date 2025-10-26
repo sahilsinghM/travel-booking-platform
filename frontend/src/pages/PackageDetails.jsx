@@ -286,7 +286,7 @@ const PackageDetails = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="sticky top-8"
             >
-              <Card>
+              <Card className="p-6">
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-3xl font-bold text-ocean-blue-600">
