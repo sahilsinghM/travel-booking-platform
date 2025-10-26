@@ -105,11 +105,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <FiMail className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">{settings?.contact?.email || 'support@travelqbx.in'}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FiPhone className="text-ocean-blue-400" size={18} />
-                <span className="text-gray-300 text-sm">{settings?.contact?.phone || '+91 9599667129'}</span>
+                <span className="text-gray-300 text-sm">{settings?.contact?.email || 'quantumbox50@gmail.com'}</span>
               </div>
               <div className="flex items-start space-x-3">
                 <FiMapPin className="text-ocean-blue-400 mt-1" size={18} />
