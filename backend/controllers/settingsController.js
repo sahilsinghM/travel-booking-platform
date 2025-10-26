@@ -1,9 +1,25 @@
+const mongoose = require('mongoose');
 const Settings = require('../models/Settings');
 const { validationResult } = require('express-validator');
 
 // Get settings
 exports.getSettings = async (req, res) => {
   try {
+    // Check if mongoose is connected
+    if (!mongoose.connection.readyState) {
+      // Return default settings if DB not connected
+      return res.status(200).json({
+        success: true,
+        data: {
+          siteInfo: { name: 'TravelBooking', logo: '', tagline: 'Discover amazing destinations' },
+          contact: { phone: '+91 9599667129', email: 'support@travelqbx.in', address: 'Gurugram, Haryana, India', socialMedia: {} },
+          homepage: { heroTitle: 'Discover Your Next Adventure', heroSubtitle: 'Explore breathtaking destinations', stats: { travelers: 5000, destinations: 50, reviews: 2500, satisfaction: 98 } },
+          footer: { companyInfo: 'Discover amazing destinations', destinations: [], quickLinks: [] },
+          testimonials: []
+        }
+      });
+    }
+    
     const settings = await Settings.getSettings();
     
     res.status(200).json({
