@@ -149,7 +149,7 @@ const Home = () => {
           {showSkeleton ? (
             <PackageGridSkeleton count={4} />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredPackages.map((pkg, index) => (
                 <motion.div
                   key={pkg.id}
@@ -157,77 +157,79 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                    <div className="relative">
-                      <img
-                        src={pkg.images[0]}
-                        alt={pkg.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <Badge className="absolute top-4 right-4 bg-white/90 text-gray-900 hover:bg-white">
-                        {pkg.duration}
-                      </Badge>
-                      <Badge variant="secondary" className="absolute top-4 left-4 bg-black/50 text-white hover:bg-black/70">
-                        {pkg.category}
-                      </Badge>
-                    </div>
-                    
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
-                          {pkg.title}
-                        </h3>
-                        <div className="flex items-center">
-                          <FiStar className="text-yellow-400 mr-1" size={16} />
-                          <span className="text-sm text-gray-600">{pkg.rating}</span>
-                        </div>
+                  <Link to={`/packages/${pkg._id}`} className="block h-full">
+                    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer h-full">
+                      <div className="relative">
+                        <img
+                          src={pkg.images[0]}
+                          alt={pkg.title}
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <Badge className="absolute top-4 right-4 bg-white/90 text-gray-900 hover:bg-white">
+                          {pkg.duration}
+                        </Badge>
+                        <Badge variant="secondary" className="absolute top-4 left-4 bg-black/50 text-white hover:bg-black/70">
+                          {pkg.category}
+                        </Badge>
                       </div>
                       
-                      <div className="flex items-center text-gray-600 mb-3">
-                        <FiMapPin size={16} className="mr-2" />
-                        <span className="text-sm">{pkg.destination}</span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center text-gray-600">
-                          <FiUsers size={16} className="mr-2" />
-                          <span className="text-sm">{pkg.groupSize}</span>
+                      <CardContent className="p-6 flex flex-col h-full">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                            {pkg.title}
+                          </h3>
+                          <div className="flex items-center">
+                            <FiStar className="text-yellow-400 mr-1" size={16} />
+                            <span className="text-sm text-gray-600">{pkg.rating}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center text-gray-600">
-                          <FiClock size={16} className="mr-2" />
-                          <span className="text-sm">{pkg.difficulty}</span>
+                        
+                        <div className="flex items-center text-gray-600 mb-3">
+                          <FiMapPin size={16} className="mr-2" />
+                          <span className="text-sm">{pkg.destination}</span>
                         </div>
-                      </div>
-                      
-                      <div className="mb-4">
-                        <div className="mb-2">
-                          <span className="text-3xl font-bold text-ocean-blue-600">
-                            {formatCurrency(pkg.price)}
-                          </span>
-                          {pkg.originalPrice && (
-                            <div className="flex items-center mt-1">
-                              <span className="text-base text-gray-500 line-through mr-2">
-                                {formatCurrency(pkg.originalPrice)}
-                              </span>
-                              <Badge variant="destructive" className="text-xs">
-                                Save {Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100)}%
-                              </Badge>
-                            </div>
-                          )}
+                        
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center text-gray-600">
+                            <FiUsers size={16} className="mr-2" />
+                            <span className="text-sm">{pkg.groupSize}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <FiClock size={16} className="mr-2" />
+                            <span className="text-sm">{pkg.difficulty}</span>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 flex items-center">
-                          <FiStar className="text-yellow-400 mr-1" size={14} />
-                          {pkg.rating} rating • {pkg.reviews} reviews
-                        </p>
-                      </div>
-                      
-                      <Link to={`/packages/${pkg._id}`}>
-                        <Button className="w-full">
-                          View Details
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
+                        
+                        <div className="mb-4 flex-grow">
+                          <div className="mb-2">
+                            <span className="text-3xl font-bold text-ocean-blue-600">
+                              {formatCurrency(pkg.price)}
+                            </span>
+                            {pkg.originalPrice && (
+                              <div className="flex items-center mt-1">
+                                <span className="text-base text-gray-500 line-through mr-2">
+                                  {formatCurrency(pkg.originalPrice)}
+                                </span>
+                                <Badge variant="destructive" className="text-xs">
+                                  Save {Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100)}%
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 flex items-center">
+                            <FiStar className="text-yellow-400 mr-1" size={14} />
+                            {pkg.rating} rating • {pkg.reviews} reviews
+                          </p>
+                        </div>
+                        
+                        <div className="mt-auto">
+                          <Button className="w-full">
+                            View Details
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </motion.div>
               ))}
             </div>
