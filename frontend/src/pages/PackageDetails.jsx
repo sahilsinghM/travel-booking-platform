@@ -3,8 +3,11 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiStar, FiMapPin, FiUsers, FiClock, FiCalendar, FiCheck, FiX, FiArrowLeft, FiShare2, FiHeart } from 'react-icons/fi';
 import api from '../services/api';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '../context/AuthContext';
 import { formatCurrency } from '../utils/helpers';
 
@@ -14,6 +17,7 @@ const PackageDetails = () => {
   const { isAuthenticated } = useAuth();
   const [packageData, setPackageData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedDates, setSelectedDates] = useState({
     startDate: '',
@@ -28,6 +32,7 @@ const PackageDetails = () => {
   const loadPackageDetails = async () => {
     try {
       setLoading(true);
+      setShowSkeleton(true);
       const pkg = await api.getPackageById(id);
       if (pkg) {
         setPackageData(pkg);
@@ -49,6 +54,8 @@ const PackageDetails = () => {
       navigate('/packages');
     } finally {
       setLoading(false);
+      // Show skeleton for a minimum time for better UX
+      setTimeout(() => setShowSkeleton(false), 1000);
     }
   };
 
@@ -134,21 +141,21 @@ const PackageDetails = () => {
                     alt={packageData.title}
                     className="w-full h-96 object-cover"
                   />
-                  <div className="absolute top-4 left-4 bg-ocean-blue-600 text-white px-3 py-1 rounded-full">
-                    <span className="text-sm font-medium">{packageData.category}</span>
-                  </div>
+                  <Badge className="absolute top-4 left-4 bg-ocean-blue-600 text-white hover:bg-ocean-blue-700">
+                    {packageData.category}
+                  </Badge>
                   <div className="absolute top-4 right-4 flex space-x-2">
-                    <button className="bg-white bg-opacity-90 p-2 rounded-full hover:bg-opacity-100 transition-all">
+                    <Button variant="secondary" size="icon" className="bg-white/90 hover:bg-white">
                       <FiShare2 size={18} />
-                    </button>
-                    <button className="bg-white bg-opacity-90 p-2 rounded-full hover:bg-opacity-100 transition-all">
+                    </Button>
+                    <Button variant="secondary" size="icon" className="bg-white/90 hover:bg-white">
                       <FiHeart size={18} />
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 
                 {/* Thumbnail Images */}
-                <div className="p-4">
+                <CardContent className="p-4">
                   <div className="flex space-x-2 overflow-x-auto">
                     {packageData.images.map((image, index) => (
                       <button
@@ -168,7 +175,7 @@ const PackageDetails = () => {
                       </button>
                     ))}
                   </div>
-                </div>
+                </CardContent>
               </Card>
             </motion.div>
 
@@ -178,7 +185,7 @@ const PackageDetails = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <Card>
+              <Card className="p-6">
                 <div className="mb-6">
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">
                     {packageData.title}
@@ -203,74 +210,71 @@ const PackageDetails = () => {
                   </div>
                 </div>
 
-                <div className="prose max-w-none">
-                  <p className="text-gray-700 text-lg leading-relaxed">
-                    {packageData.description}
-                  </p>
-                </div>
-              </Card>
-            </motion.div>
-
-            {/* Itinerary */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Card>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Itinerary</h2>
-                <div className="space-y-4">
-                  {packageData.itinerary.map((day, index) => (
-                    <div key={index} className="flex items-start space-x-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-ocean-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                        {index + 1}
+                <Tabs defaultValue="overview" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+                    <TabsTrigger value="details">Details</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="overview" className="mt-6">
+                    <div className="prose max-w-none">
+                      <p className="text-gray-700 text-lg leading-relaxed">
+                        {packageData.description}
+                      </p>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="itinerary" className="mt-6">
+                    <div className="space-y-4">
+                      {packageData.itinerary.map((day, index) => (
+                        <div key={index} className="flex items-start space-x-4">
+                          <div className="flex-shrink-0 w-8 h-8 bg-ocean-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-gray-700">{day}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="details" className="mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                          <FiCheck className="text-mint-green-600 mr-2" size={20} />
+                          What's Included
+                        </h3>
+                        <ul className="space-y-2">
+                          {packageData.inclusions.map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <FiCheck className="text-mint-green-600 mr-2 mt-1 flex-shrink-0" size={16} />
+                              <span className="text-gray-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-gray-700">{day}</p>
+
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                          <FiX className="text-red-600 mr-2" size={20} />
+                          Not Included
+                        </h3>
+                        <ul className="space-y-2">
+                          {packageData.exclusions.map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <FiX className="text-red-600 mr-2 mt-1 flex-shrink-0" size={16} />
+                              <span className="text-gray-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </TabsContent>
+                </Tabs>
               </Card>
-            </motion.div>
-
-            {/* Inclusions & Exclusions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <FiCheck className="text-mint-green-600 mr-2" size={20} />
-                    What's Included
-                  </h3>
-                  <ul className="space-y-2">
-                    {packageData.inclusions.map((item, index) => (
-                      <li key={index} className="flex items-start">
-                        <FiCheck className="text-mint-green-600 mr-2 mt-1 flex-shrink-0" size={16} />
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-
-                <Card>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <FiX className="text-red-600 mr-2" size={20} />
-                    Not Included
-                  </h3>
-                  <ul className="space-y-2">
-                    {packageData.exclusions.map((item, index) => (
-                      <li key={index} className="flex items-start">
-                        <FiX className="text-red-600 mr-2 mt-1 flex-shrink-0" size={16} />
-                        <span className="text-gray-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </div>
             </motion.div>
           </div>
 
