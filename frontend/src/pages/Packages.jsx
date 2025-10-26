@@ -252,80 +252,104 @@ const Packages = () => {
               </div>
             </div>
 
-            {/* Packages Grid */}
+            {/* Packages List */}
             {showSkeleton ? (
               <PackageGridSkeleton count={6} />
             ) : currentPackages.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="space-y-4">
                 {currentPackages.map((pkg, index) => (
                   <motion.div
                     key={pkg._id}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
-                    <Link to={`/packages/${pkg._id}`} className="block h-full">
-                      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer h-full border-0">
-                        {/* Image Section - Larger and More Prominent */}
-                        <div className="relative">
-                          {imageErrors[pkg._id] ? (
-                            <div className="w-full h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex flex-col items-center justify-center">
-                              <FiMapPin className="text-gray-400 mb-2" size={48} />
-                              <span className="text-gray-500 text-sm">Image Unavailable</span>
-                            </div>
-                          ) : (
-                            <img
-                              src={pkg.images[0]}
-                              alt={pkg.title}
-                              className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={() => handleImageError(pkg._id)}
-                            />
-                          )}
-                          <Badge className="absolute top-3 left-3 bg-black/70 text-white text-xs border-0">
-                            {pkg.category}
-                          </Badge>
-                          <button className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 transition-colors">
-                            <FiHeart size={18} className="text-gray-700" />
-                          </button>
-                        </div>
-                        
-                        {/* Card Content - Clean and Minimal */}
-                        <div className="p-4 flex flex-col h-full">
-                          {/* Title */}
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                            {pkg.title}
-                          </h3>
-                          
-                          {/* Location */}
-                          <div className="flex items-center text-sm text-gray-600 mb-2">
-                            <FiMapPin size={14} className="mr-1.5" />
-                            <span>{pkg.destination}</span>
-                          </div>
-                          
-                          {/* Rating and Duration */}
-                          <div className="flex items-center text-xs text-gray-500 mb-3">
-                            <FiStar className="text-yellow-400 mr-1" size={14} />
-                            <span className="font-medium">{pkg.rating}</span>
-                            <span className="mx-1">•</span>
-                            <span>{pkg.duration}</span>
-                          </div>
-                          
-                          {/* Pricing */}
-                          <div className="mt-auto">
-                            {pkg.originalPrice ? (
-                              <div className="flex items-baseline gap-2">
-                                <span className="text-2xl font-bold text-gray-900">
-                                  {formatCurrency(pkg.price)}
-                                </span>
-                                <span className="text-sm text-gray-500 line-through">
-                                  {formatCurrency(pkg.originalPrice)}
-                                </span>
+                    <Link to={`/packages/${pkg._id}`} className="block">
+                      <Card className="overflow-hidden hover:shadow-md transition-all duration-200 group cursor-pointer border border-gray-200">
+                        <div className="flex">
+                          {/* Image Section */}
+                          <div className="relative w-64 flex-shrink-0">
+                            {imageErrors[pkg._id] ? (
+                              <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex flex-col items-center justify-center">
+                                <FiMapPin className="text-gray-400 mb-2" size={32} />
+                                <span className="text-gray-500 text-xs">Image Unavailable</span>
                               </div>
                             ) : (
-                              <span className="text-2xl font-bold text-gray-900">
-                                {formatCurrency(pkg.price)}
-                              </span>
+                              <img
+                                src={pkg.images[0]}
+                                alt={pkg.title}
+                                className="w-full h-48 object-cover"
+                                onError={() => handleImageError(pkg._id)}
+                              />
                             )}
+                            <Badge className="absolute top-2 left-2 bg-black/70 text-white text-xs border-0">
+                              {pkg.category}
+                            </Badge>
+                          </div>
+                          
+                          {/* Content Section */}
+                          <div className="flex-1 p-4 flex flex-col justify-between">
+                            {/* Left Column - Main Info */}
+                            <div className="flex-1">
+                              <div className="flex items-start justify-between mb-2">
+                                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-ocean-blue-600 transition-colors">
+                                  {pkg.title}
+                                </h3>
+                                <button 
+                                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                >
+                                  <FiHeart size={18} className="text-gray-400 hover:text-red-500" />
+                                </button>
+                              </div>
+                              
+                              <div className="flex items-center text-sm text-gray-600 mb-3">
+                                <FiMapPin size={14} className="mr-1.5" />
+                                <span>{pkg.destination}</span>
+                              </div>
+                              
+                              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                                <div className="flex items-center">
+                                  <FiStar className="text-yellow-400 mr-1" size={14} />
+                                  <span className="font-medium">{pkg.rating}</span>
+                                  <span className="ml-1">({pkg.reviews} reviews)</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <FiClock size={14} className="mr-1" />
+                                  <span>{pkg.duration}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <FiUsers size={14} className="mr-1" />
+                                  <span>{pkg.groupSize}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Bottom Section - Pricing */}
+                            <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
+                              <div className="flex-1">
+                                {pkg.originalPrice ? (
+                                  <div className="flex items-baseline gap-2">
+                                    <span className="text-2xl font-bold text-gray-900">
+                                      {formatCurrency(pkg.price)}
+                                    </span>
+                                    <span className="text-sm text-gray-500 line-through">
+                                      {formatCurrency(pkg.originalPrice)}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-2xl font-bold text-gray-900">
+                                    {formatCurrency(pkg.price)}
+                                  </span>
+                                )}
+                              </div>
+                              <Button variant="outline" className="ml-4">
+                                View Details
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </Card>
