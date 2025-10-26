@@ -35,14 +35,17 @@ const getPackages = async (req, res, next) => {
     }
 
     // Use lean() for better performance on read-only queries
+    const limit = parseInt(req.query.limit) || 1000; // Allow custom limit via query param
+    const total = await Package.countDocuments(query);
     const packages = await Package.find(query)
       .lean()
       .sort({ createdAt: -1 })
-      .limit(50); // Limit results for better performance
+      .limit(limit);
     
     res.json({
       success: true,
       count: packages.length,
+      total,
       data: packages
     });
   } catch (error) {
