@@ -305,20 +305,26 @@ const Packages = () => {
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <span className="text-2xl font-bold text-ocean-blue-600">
+                        <div className="mb-4">
+                          <div className="mb-2">
+                            <span className="text-3xl font-bold text-ocean-blue-600">
                               {formatCurrency(pkg.price)}
                             </span>
                             {pkg.originalPrice && (
-                              <span className="text-sm text-gray-500 line-through ml-2">
-                                {formatCurrency(pkg.originalPrice)}
-                              </span>
+                              <div className="flex items-center mt-1">
+                                <span className="text-base text-gray-500 line-through mr-2">
+                                  {formatCurrency(pkg.originalPrice)}
+                                </span>
+                                <Badge variant="destructive" className="text-xs">
+                                  Save {Math.round(((pkg.originalPrice - pkg.price) / pkg.originalPrice) * 100)}%
+                                </Badge>
+                              </div>
                             )}
                           </div>
-                          <span className="text-sm text-gray-500">
-                            {pkg.reviews} reviews
-                          </span>
+                          <p className="text-sm text-gray-600 flex items-center">
+                            <FiStar className="text-yellow-400 mr-1" size={14} />
+                            {pkg.rating} rating • {pkg.reviews} reviews
+                          </p>
                         </div>
                         
                         <Link to={`/packages/${pkg._id}`}>
