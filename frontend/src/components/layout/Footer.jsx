@@ -29,7 +29,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-ocean-blue-600 to-mint-green-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">T</span>
               </div>
-              <span className="text-xl font-bold">{settings?.siteInfo?.name || 'TravelBooking'}</span>
+              <span className="text-xl font-bold">{settings?.siteInfo?.name || 'Travelqbx'}</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               {settings?.footer?.companyInfo || 'Discover amazing destinations and create unforgettable memories with our carefully curated travel packages.'}
@@ -65,11 +65,6 @@ const Footer = () => {
               <li>
                 <Link to="/" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
                   Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/packages" className="text-gray-300 hover:text-ocean-blue-400 transition-colors duration-200">
-                  Travel Packages
                 </Link>
               </li>
               <li>
@@ -121,7 +116,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2024 TravelBooking. All rights reserved.
+              © 2024 Travelqbx. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <a href="#" className="text-gray-400 hover:text-ocean-blue-400 text-sm transition-colors duration-200">

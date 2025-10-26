@@ -32,7 +32,6 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Packages', path: '/packages' },
   ];
 
   return (
@@ -45,7 +44,7 @@ const Navbar = () => {
               <span className="text-white font-bold text-lg">T</span>
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-ocean-blue-600 to-mint-green-600 bg-clip-text text-transparent">
-              TravelBooking
+              Travelqbx
             </span>
           </Link>
 

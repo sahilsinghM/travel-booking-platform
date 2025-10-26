@@ -34,7 +34,7 @@ const Booking = () => {
 
   // Redirect if no package data
   if (!packageData) {
-    navigate('/packages');
+    navigate('/');
     return null;
   }
 
@@ -127,7 +127,7 @@ const Booking = () => {
                 Booking Request Received!
               </h1>
               <p className="text-lg text-gray-600">
-                Thank you for choosing TravelBooking
+                Thank you for choosing Travelqbx
               </p>
             </div>
 
@@ -170,7 +170,7 @@ const Booking = () => {
               <Button onClick={() => navigate('/')} variant="outline">
                 Back to Home
               </Button>
-              <Button onClick={() => navigate('/packages')}>
+              <Button onClick={() => navigate('/')}>
                 Browse More Packages
               </Button>
             </div>
