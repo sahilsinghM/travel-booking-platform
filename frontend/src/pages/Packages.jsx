@@ -266,9 +266,10 @@ const Packages = () => {
                   >
                     <Link to={`/packages/${pkg._id}`} className="block">
                       <Card className="overflow-hidden hover:shadow-md transition-all duration-200 group cursor-pointer border border-gray-200">
-                        <div className="flex">
+                        {/* Mobile: Vertical Card Layout, Desktop/iPad: Horizontal List Layout */}
+                        <div className="flex flex-col md:flex-row">
                           {/* Image Section */}
-                          <div className="relative w-64 flex-shrink-0">
+                          <div className="relative w-full md:w-64 flex-shrink-0 h-48 md:h-auto">
                             {imageErrors[pkg._id] ? (
                               <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex flex-col items-center justify-center">
                                 <FiMapPin className="text-gray-400 mb-2" size={32} />
@@ -278,7 +279,7 @@ const Packages = () => {
                               <img
                                 src={pkg.images[0]}
                                 alt={pkg.title}
-                                className="w-full h-48 object-cover"
+                                className="w-full h-full object-cover"
                                 onError={() => handleImageError(pkg._id)}
                               />
                             )}
@@ -289,7 +290,7 @@ const Packages = () => {
                           
                           {/* Content Section */}
                           <div className="flex-1 p-4 flex flex-col justify-between">
-                            {/* Left Column - Main Info */}
+                            {/* Main Info */}
                             <div className="flex-1">
                               <div className="flex items-start justify-between mb-2">
                                 <h3 className="text-lg font-semibold text-gray-900 group-hover:text-ocean-blue-600 transition-colors">
@@ -311,7 +312,7 @@ const Packages = () => {
                                 <span>{pkg.destination}</span>
                               </div>
                               
-                              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3 flex-wrap">
                                 <div className="flex items-center">
                                   <FiStar className="text-yellow-400 mr-1" size={14} />
                                   <span className="font-medium">{pkg.rating}</span>
@@ -329,11 +330,11 @@ const Packages = () => {
                             </div>
                             
                             {/* Bottom Section - Pricing */}
-                            <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-gray-100 pt-3 mt-auto">
                               <div className="flex-1">
                                 {pkg.originalPrice ? (
                                   <div className="flex items-baseline gap-2">
-                                    <span className="text-2xl font-bold text-gray-900">
+                                    <span className="text-xl sm:text-2xl font-bold text-gray-900">
                                       {formatCurrency(pkg.price)}
                                     </span>
                                     <span className="text-sm text-gray-500 line-through">
@@ -341,12 +342,12 @@ const Packages = () => {
                                     </span>
                                   </div>
                                 ) : (
-                                  <span className="text-2xl font-bold text-gray-900">
+                                  <span className="text-xl sm:text-2xl font-bold text-gray-900">
                                     {formatCurrency(pkg.price)}
                                   </span>
                                 )}
                               </div>
-                              <Button variant="outline" className="ml-4">
+                              <Button variant="outline" className="w-full sm:w-auto">
                                 View Details
                               </Button>
                             </div>
